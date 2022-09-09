@@ -9,3 +9,5 @@ int vecSum(int* arr, int arrSize)
     sum += arr[i]; 
   return sum; 
 }
+
+

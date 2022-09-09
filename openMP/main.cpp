@@ -70,14 +70,14 @@ void wsSections(int matrixSize, bool paralell)
    *  - Serve para listar blocos que serão processados por threads separadas
    *  - Precisam de {}
    *  ! se uma thread for muito rapida ela pode executar mais de uma section
-   *    - ou se um  num_threads  definido pelo programador for menor do que o número de sections
+   *  - ou se um  num_threads  definido pelo programador for menor do que o número de sections
    */
   int i,  threadId;
   int oddCount = 0;
   IntMatrix matrix = generateRndIntMatrix(matrixSize, matrixSize);
   cout << "\n Matrix: ";
   printMatrix(matrix);
-  #pragma omp paralell private(i, threadId) 
+  #pragma omp paralell private(i, threadId)
   {
     #pragma omp paralell for shared(oddCount)
     for(i = 0;  i < matrixSize; i++) 
@@ -124,14 +124,14 @@ void wsSections(int matrixSize, bool paralell)
 void syncCritical() 
 {
   int data = 0, threadId; 
-
   #pragma omp parallel num_threads(5) private(threadId) shared(data) 
   {
-    threadId = omp_get_thread_num(); 
-    #pragma critical
+  #pragma critical
     {
       data++; 
-      cout << "Current value: " << data << endl; 
+      threadId = omp_get_thread_num(); 
+      printf("Thread : %d \n ", threadId); 
+      printf(" data: %d \n ", data); 
     }
   }
 }
@@ -159,13 +159,27 @@ void syncCritical()
  * OMP_NESTED  -> aninhamento de paralelismo
  * 
  */
+void opmFunctions()
+{
+  int threadQtd = 10;
+  omp_set_num_threads(threadQtd); 
+  int threadNumbers = omp_get_num_threads(); 
+  omp_get_num_procs(); 
+  // Lock
+  omp_lock_t myLock; 
+  omp_init_lock(&myLock);
+  omp_set_lock(&myLock); 
+  int isLocked = omp_test_lock(&myLock);
+  omp_unset_lock(&myLock); 
+  omp_destroy_lock(&myLock); 
+}
 
 int main(int argc, char **argv)
 {
-  helloOpenMP();
+  // helloOpenMP();
   string arg(argv[1]);
   int dimensionOfMatrix = stoi(arg, nullptr);
   // wsFOR(dimensionOfMatrix);
-  // wsSections(dimensionOfMatrix,false); 
-  // syncCritical(); 
+  //wsSections(dimensionOfMatrix,false); 
+  syncCritical(); 
 }
