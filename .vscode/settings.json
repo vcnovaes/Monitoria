@@ -1,0 +1,9 @@
+{
+  "files.associations": {
+    "stdio.h": "c",
+    "numeric": "c",
+    "ratio": "c",
+    "*.tcc": "c",
+    "valarray": "c"
+  }
+}
